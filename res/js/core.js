@@ -5,78 +5,78 @@ var csvSrc = "res/csv/atlas.csv";
 var atlasSrc = "res/img/atlas.png";
 
 // game size
-var width = 288;
-var height = 512;
+var width = 288;      // 游戏画面宽度
+var height = 512;     // 游戏画面高度
 
 // physics
-var xVel = -4;
-var gravity = 1.5;
-var jumpVel = -14;
-var maxFallVel = 15;
+var xVel = -4;        // 水平移动速度
+var gravity = 1.5;    // 重力加速度
+var jumpVel = -14;    // 跳跃初始速度
+var maxFallVel = 15;  // 最大下落速度
 
 // bird
-var birdX = 69;
-var birdStartY = 236;
-var birdWidth = 25;
-var birdHeight = 15;
-var birdRenderOffsetX = -11;
-var birdRenderOffsetY = -18;
+var birdX = 69;       // 小鸟的固定X坐标
+var birdStartY = 236; // 小鸟的初始Y坐标
+var birdWidth = 25;   // 小鸟碰撞箱宽度
+var birdHeight = 15;  // 小鸟碰撞箱高度
+var birdRenderOffsetX = -11;  // 小鸟渲染X偏移量
+var birdRenderOffsetY = -18;  // 小鸟渲染Y偏移量
 
 // bird animation
-var sineWaveA = 15;
-var sineWaveT = 45;
-var swingT = 5;
+var sineWaveA = 15;   // 正弦波振幅(准备状态下小鸟上下摆动)
+var sineWaveT = 45;   // 正弦波周期
+var swingT = 5;       // 翅膀摆动周期
 
 // pipe
-var pipeWidth = 48;
-var pipeHeight = 320;
-var pipeSpacing = 172;
-var pipeGap = 90;
-var pipeStartX = 360;
-var pipeRandomBoundary = 50;
+var pipeWidth = 48;   // 管道宽度
+var pipeHeight = 320; // 管道高度
+var pipeSpacing = 172;// 管道间距
+var pipeGap = 90;     // 上下管道间隙
+var pipeStartX = 360; // 管道初始X坐标
+var pipeRandomBoundary = 50;  // 管道随机位置边界
 
 // land
-var landStartX = 0;
-var landWidth = 288;
-var landY = 400;
+var landStartX = 0;   // 地面初始X坐标
+var landWidth = 288;  // 地面宽度
+var landY = 400;      // 地面Y坐标
 
-// ql
-var qlAlpha = 0.6;
-var qlGamma = 0.8;
-var qlResolution = 15;
-var qlAliveReward = 1;
-var qlDeadReward = -100;
-var qlEpsilon = 0;
-var qlExploreJumpRate = 0.1;
+// ql (Q-Learning参数)
+var qlAlpha = 0.6;    // 学习率
+var qlGamma = 0.8;    // 折扣因子
+var qlResolution = 15;// 状态空间分辨率
+var qlAliveReward = 1;// 存活奖励
+var qlDeadReward = -100;  // 死亡惩罚
+var qlEpsilon = 0;    // 探索率
+var qlExploreJumpRate = 0.1;  // 探索时跳跃概率
 
 // init fps
-var inverseDefaultFPS = 1000 / 40;
+var inverseDefaultFPS = 1000 / 40;  // 默认帧率的倒数(ms)
 
 // dead animation
-var deadFlashFrame = 5;
+var deadFlashFrame = 5;   // 死亡闪烁帧数
 
 // play ui
-var playingScoreMidX = 144;
-var playingScoreY = 41;
-var playingScoreSpacing = 22;
+var playingScoreMidX = 144;   // 游戏中分数X中心坐标
+var playingScoreY = 41;       // 游戏中分数Y坐标
+var playingScoreSpacing = 22; // 游戏中分数数字间距
 
 // game over ui
-var gameOverTextX = 40;
-var gameOverTextY = 123;
-var gameOverPanelX = 24;
-var gameOverPanelY = 195;
-var panelScoreRightX = 218;
-var panelScoreY = 231;
-var panelMaxScoreY = 272;
-var panelScoreSpacing = 16;
-var medalX = 55;
-var medalY = 240;
+var gameOverTextX = 40;       // Game Over文字X坐标
+var gameOverTextY = 123;      // Game Over文字Y坐标
+var gameOverPanelX = 24;      // 结算面板X坐标
+var gameOverPanelY = 195;     // 结算面板Y坐标
+var panelScoreRightX = 218;   // 面板分数右对齐X坐标
+var panelScoreY = 231;        // 面板当前分数Y坐标
+var panelMaxScoreY = 272;     // 面板最高分Y坐标
+var panelScoreSpacing = 16;   // 面板分数数字间距
+var medalX = 55;              // 奖牌X坐标
+var medalY = 240;             // 奖牌Y坐标
 
 // ready ui
-var tutorialX = 88;
-var tutorialY = 218;
-var readyTextX = 46;
-var readyTextY = 146;
+var tutorialX = 88;           // 教程图片X坐标
+var tutorialY = 218;          // 教程图片Y坐标
+var readyTextX = 46;          // Ready文字X坐标
+var readyTextY = 146;         // Ready文字Y坐标
 
 function first(v) {
     return v.length > 0 ? v[0] : null;
@@ -113,20 +113,20 @@ function apply(x, funcs) {
 
 function startingState() {
     return {
-        mode: "ready",
-        startFrame: 0,
-        jumpFrame: 0,
-        birdY: birdStartY,
-        curFrame: 0,
-        birdSprite: 0,
-        round: 0,
-        score: 0,
-        totalScore: 0,
-        maxScore: 0,
-        deadFlash: 0,
-        fps: 0,
-        pipeList: [],
-        landList: [],
+        mode: "ready",          // 游戏状态：ready（准备）, playing（游戏中）, dead（死亡）
+        startFrame: 0,          // 游戏开始时的帧数
+        jumpFrame: 0,           // 最后一次跳跃的帧数
+        birdY: birdStartY,      // 小鸟的当前Y坐标
+        curFrame: 0,            // 当前帧数
+        birdSprite: 0,         // 小鸟动画帧索引（0-2）
+        round: 0,              // 当前回合数
+        score: 0,              // 当前回合得分
+        totalScore: 0,         // 所有回合总得分
+        maxScore: 0,           // 最高得分记录
+        deadFlash: 0,          // 死亡闪烁效果计数器
+        fps: 0,                // 当前帧率
+        pipeList: [],          // 管道对象列表
+        landList: [],          // 地面对象列表
     };
 }
 
@@ -249,9 +249,22 @@ function animation(gameState) {
     var curFrame = gameState.curFrame;
 
     if (mode === "ready" || mode === "playing")
-        gameState.birdSprite = Math.floor(curFrame / swingT) % 3;
+        gameState.birdSprite = Math.floor(curFrame / swingT) % 3; // 控制小鸟翅膀扇动动画
+    /*
+        1. swingT = 5 ：翅膀摆动周期，每5帧切换一次动画
+        2. curFrame / swingT ：当前帧数除以周期，随时间缓慢增加
+        3. Math.floor() ：向下取整，使数值阶梯式增长
+        4. % 3 ：取余数，使结果在 0、1、2 之间循环
+        所以：
 
-    if (mode === "ready")
+        - 当 curFrame = 0-4 时，birdSprite = 0
+        - 当 curFrame = 5-9 时，birdSprite = 1
+        - 当 curFrame = 10-14 时，birdSprite = 2
+        - 当 curFrame = 15-19 时，又回到 birdSprite = 0
+        - 以此类推...
+    */
+
+    if (mode === "ready") // 在 "ready" 状态下（游戏还未开始时）创建小鸟上下摆动的动画效果
         gameState.birdY = birdStartY + sineWaveA * Math.sin(curFrame * Math.PI * 2 / sineWaveT);
 
     if (mode === "dead") {
@@ -268,8 +281,8 @@ function updateBird(gameState) {
     var mode = gameState.mode;
     if (mode === "playing") {
         var curVel = Math.min(jumpVel + gravity * (curFrame - jumpFrame), maxFallVel);
-        var newY = Math.min(birdY + curVel, landY - birdHeight);
-        var newY = Math.max(newY, -birdHeight);
+        var newY = Math.min(birdY + curVel, landY - birdHeight); // 新位置不能到地面以下
+        var newY = Math.max(newY, -birdHeight); // 新位置不能突破天花板
         gameState.birdY = newY;
     }
     return animation(gameState);
@@ -331,7 +344,7 @@ function getQLState(gameState) {
     return S;
 }
 
-function reward(Q, S, S_, A, R) {
+function reward(Q, S, S_, A, R) { // q-learning的状态更新公式
     if (S && S_ && A in [0, 1] && S in Q && S_ in Q)
         Q[S][A] = (1 - qlAlpha) * Q[S][A] + qlAlpha * (R + qlGamma * max(Q[S_]));
     return Q;
@@ -345,7 +358,7 @@ function updateQL(gameState) {
         updateQL.S = null;
     }
 
-    if (!updateQL.Q) {
+    if (!updateQL.Q) {  // 状态记录表格 - Q
         updateQL.Q = {};
         updateQL.S = null;
     }
@@ -357,11 +370,11 @@ function updateQL(gameState) {
     // prev action 
     var A = updateQL.A;
     // current state
-    var S_ = getQLState(gameState);
+    var S_ = getQLState(gameState); // 下一个状态
 
     if (S_ && !(S_ in Q)) Q[S_] = [0, 0];
 
-    if (gameState.mode == "playing") {
+    if (gameState.mode == "playing") { // 如果存活, 更新Q-table, 以及当前状态
         updateQL.Q = reward(Q, S, S_, A, qlAliveReward);
         updateQL.S = S_;
 
@@ -376,7 +389,7 @@ function updateQL(gameState) {
 
         if (A_ === 1) gameState = jump(gameState);
         updateQL.A = A_;
-    } else if (gameState.mode == "dead") {
+    } else if (gameState.mode == "dead") { // 如果死亡
         updateQL.Q = reward(Q, S, S_, A, qlDeadReward);
         updateQL.S = null;
         updateQL.A = null;
@@ -407,7 +420,7 @@ function drawSprite(spriteName, x, y) {
     render.ctx.drawImage(render.image, sprite[2], sprite[3], sprite[0], sprite[1], x, y, sprite[0], sprite[1]);
 }
 
-function render(gameState) {
+function render(gameState) {  // 在 JavaScript 中，函数也是对象，可以给函数对象添加属性。这是 JavaScript 的一个特殊特性。
     if (!render.cvs || !render.ctx) {
         render.cvs = document.getElementById("cvs");
         render.cvs.width = width;
